@@ -52,15 +52,23 @@ class LoginController extends Controller {
     public function logout(Request $r) {
         return new Response("", 401);
     }
+    
 /**
+     * Fonction qui permettre de déconnecter l'utilisateur  en base de données
+     * A la fin du traitement on est rediriger la page d'accueil
      * @Route("/disconnect/{id}")
      */
     public function disconnect(Request $r,$id){
+        /* J'initialise ma variable Entity Manager */
         $em = $this->getDoctrine()->getManager();
+        /*Creaction d'une classe id*/
         $user = $this->getDoctrine()->getRepository(Utilisateur::class)->find($id);
+        /*Utilisateur est sur false donc déconnecter*/
         $user->setConnected(false);
+        /* enrengistrement et envoie à la base de donnée*/
         $em->persist($user);
         $em->flush();
+        /*Redirection sur la route "homepage"*/
         return $this->redirectToRoute("homepage");
     }
 }
